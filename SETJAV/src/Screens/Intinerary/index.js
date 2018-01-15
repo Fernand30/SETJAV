@@ -1,74 +1,108 @@
 import React, { Component } from "react"
-import { View, Image, Text, TouchableOpacity, TextInput, ImageBackground, StatusBar, ScrollView, FlatList} from "react-native"
+import { View, Image, Text, TouchableOpacity, ListView, ImageBackground, StatusBar, ScrollView, FlatList} from "react-native"
 import { Images } from "../../themes"
 import styles from './styles'
 
-const arrayData = [{id:'1',date:'27/03/2017',name:'Oxford'}, {id:'2',date:'28/03/2017',name:'London'}] /* data from backend*/
+const arrayData = [{
+    id:1,
+    date:'27/03/2017',
+    name:'Oxford',
+    items: [{
+        date: '08:00',
+        image: 'walk',
+        title: 'Meet at the meting point,',
+        description: 'Treffen Sie sich am Messpunkt',
+    }, {
+        date: '10:00',
+        image: 'point',
+        title: 'Oxford guided walk',
+        description: 'Oxford getuhrte Wanderung.',
+    }, {
+        date: '10:00',
+        image: 'point',
+        title: 'Freizeit in Oxford.',
+        description: 'Shopping Town Rallye',
+    }, {
+        date: '18:30',
+        image: 'point',
+        title: 'Back with families.',
+        description: '',
+    }],
+}, {
+    id:2,
+    date:'28/03/2017',
+    name:'London',
+    items: [{
+        date: '14:30',
+        title: 'Some other action',
+        description: 'More description',
+    }],
+}]; /* data from backend*/
+
 class App extends Component {
   constructor(props){
-    super(props)
+    super(props);
+
+      this.ds = new ListView.DataSource({
+          rowHasChanged: (r1, r2) => r1 !== r2,
+          sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+      });
+    this.state = { data: {} };
   }
 
-   _renderItem = ({item}) => (
+    renderSectionHeader(sectionData, category) {
+        const section = arrayData.find(i => i.id === parseInt(category, 10));
+        return (
+            <View style={styles.flaxView}>
+                <View style={styles.oxford}>
+                    <Text style={styles.dateText}>{section.date}</Text>
+                    <Text style={styles.oxfordText}>{section.name}</Text>
+                </View>
+            </View>
+        );
+    }
 
-      <View style={styles.flaxView}>
-        <View style={styles.oxford}>
-          <Text style={styles.dateText}>{item.date}</Text>
-          <Text style={styles.oxfordText}>{item.name}</Text>
-        </View>
-        <View style={styles.rowView}>
-          <View style={styles.fixView}>       
-            <View style={styles.dateView}>
-              <Image source={Images.point} style={styles.point}/>
-              <Text style={styles.timeText}>08:00</Text>
-            </View>
-          </View> 
-          <View style={styles.shadowView}>
-            <Text style={styles.commonText}>Meet at the meting point.</Text>
-            <Text style={styles.commonText}>Treffen Sie sich am Messpunkt.</Text>
+    renderRow(item, sectionID, rowID) {
+      return (
+          <View style={styles.flaxView}>
+              <View style={styles.rowView}>
+                  <View style={styles.fixView}>
+                      <View style={styles.dateView}>
+                          <Image
+                              source={Images[item.image]}
+                              style={styles.point}
+                          />
+                          <Text style={styles.timeText}>
+                              {item.date}
+                          </Text>
+                      </View>
+                  </View>
+                  <View style={styles.shadowView}>
+                      <Text style={styles.commonText}>
+                          {item.title}
+                      </Text>
+                      <Text style={styles.commonText}>
+                          {item.description}
+                      </Text>
+                  </View>
+              </View>
           </View>
-        </View>
-        <View style={styles.rowView}>
-          <View style={styles.fixView}>         
-            <View style={styles.dateView}>
-              <Image source={Images.walk} style={styles.point}/>
-              <Text style={styles.timeText}>10:00</Text>
-            </View>
-          </View> 
-          <View style={styles.shadowView}>
-            <Text style={styles.commonText}>Oxford guided walk.</Text>
-            <Text style={styles.commonText}>Oxford getuhrte Wanderung.</Text>
-            <TouchableOpacity style={styles.redbutton}>
-              <Text style={styles.voucher}>VIEW VOUCHER</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.rowView}>
-          <View style={styles.fixView}>       
+      )
+    }
 
-          </View> 
-          <View style={styles.shadowView}>
-            <Text style={styles.commonText}>Freizeit in Oxford.</Text>
-            <Text style={styles.commonText}>Shopping Town Rallye.</Text>
-          </View>
-        </View>
-        <View style={styles.rowView}>
-          <View style={styles.fixView}>       
-            <View style={styles.dateView}>
-              <Image source={Images.point} style={styles.point}/>
-              <Text style={styles.timeText}>18:30</Text>
-            </View>
-          </View> 
-          <View style={styles.shadowView}>
-            <Text style={styles.commonText}>Back with families.</Text>
-          </View>
-        </View>
-      </View>  
-       
-  );
-  
+  transformData() {
+      const data = {};
+
+      arrayData.forEach((destination) => {
+          data[destination.id] = destination.items;
+      });
+
+      return data;
+  }
+
   render(){
-    
+      const dataSource = this.ds.cloneWithRowsAndSections(this.transformData(this.state.data));
+
   	return(
       <View style = {styles.container}>
       	<View style={styles.headerView}>
@@ -80,11 +114,13 @@ class App extends Component {
       			<Image source={Images.account} style={styles.account}/>
       		</View>
       	</View>
-        <FlatList
-          data={arrayData}
-          keyExtractor={(item) => item.id}
-          renderItem={this._renderItem}
-        />
+          <ListView
+              dataSource={dataSource}
+              enableEmptySections={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              renderRow={(rowData, sectionID, rowID) => this.renderRow(rowData, sectionID, rowID)}
+              renderSectionHeader={(sectionData, category) => this.renderSectionHeader(sectionData, category)}/>
       </View>
     )
   }

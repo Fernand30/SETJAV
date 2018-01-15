@@ -14,8 +14,8 @@ import Home from './Screens/Home';
 const Routes = () => (
   <Router hideNavBar={true}>
     <Scene key = "root">
-      <Scene key = "loading" component = {Loading} hideNavBar={true} {...this.props} initial />
-      <Scene key = "home" component = {Home} hideNavBar={true} panHandlers={null} />
+      <Scene key = "loading" component = {Loading} hideNavBar={true} {...this.props} />
+      <Scene key = "home" component = {Home} hideNavBar={true} panHandlers={null} initial />
     </Scene>
  </Router>
 );
