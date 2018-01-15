@@ -16,10 +16,9 @@ class App extends Component {
   componentDidMount() {
     for(i =0;i<100; i++){
       setTimeout(()=>{
-        this.setState({
-          progressVal: this.state.progressVal+0.01
-        })
-      },100);
+        
+      },1000);
+      if(i == 99) this.goTab()
     }
   }
 
@@ -30,7 +29,6 @@ class App extends Component {
 
   
   render(){
-      alert(this.state.progressVal)
   	return(
       <View style = {styles.container}>
           <Image source={Images.loading} style={styles.loading}/>
