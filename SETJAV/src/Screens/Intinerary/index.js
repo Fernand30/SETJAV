@@ -11,7 +11,7 @@ class App extends Component {
 
    _renderItem = ({item}) => (
 
-      <View>
+      <View style={styles.flaxView}>
         <View style={styles.oxford}>
           <Text style={styles.dateText}>{item.date}</Text>
           <Text style={styles.oxfordText}>{item.name}</Text>

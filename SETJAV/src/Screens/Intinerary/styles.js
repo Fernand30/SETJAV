@@ -24,6 +24,9 @@ export default StyleSheet.create({
     backgroundColor:'transparent',
     fontWeight: '700',
   },
+  flaxView:{
+    paddingBottom: Constants.Marin4
+  },
   headerView:{
     flexDirection: 'row',
     justifyContent:'space-between',
