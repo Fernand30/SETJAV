@@ -98,7 +98,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.setjav"
+        applicationId "com.set"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -137,6 +137,19 @@ android {
 }
 
 dependencies {
+    compile project(':rn-splash-screen')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-restart')
+    compile project(':react-native-picker')
+    compile project(':react-native-photo-view')
+    compile project(':react-native-orientation')
+    compile project(':react-native-onesignal')
+    compile project(':react-native-linear-gradient')
+    compile project(':react-native-image-picker')
+    compile project(':react-native-fs')
+    compile project(':react-native-exception-handler')
+    compile project(':react-native-device-info')
+    compile project(':@mapbox/react-native-mapbox-gl')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
